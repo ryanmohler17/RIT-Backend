@@ -8,4 +8,6 @@ COPY mvnw pom.xml ./
 COPY src ./src
 RUN ./mvnw package -DskipTests
 
+EXPOSE 8080
+
 CMD ["java", "-jar", "./target/rit-0.0.1-SNAPSHOT.jar"]
