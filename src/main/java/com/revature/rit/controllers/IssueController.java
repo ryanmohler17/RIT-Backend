@@ -11,9 +11,9 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/issues")
-public class IssueController {
-    @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-    public List<Issue> getAllIssues() {
+public class IssueController implements ObjectController<Issue> {
+    @Override
+    public List<Issue> getAllData() {
         //TODO: Hook into database dao.
 
         //Ex: issues = dao.getAllIssues();
@@ -22,8 +22,8 @@ public class IssueController {
         return issues;
     }
 
-    @GetMapping(path="/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Issue> getIssue(@PathVariable int id) {
+    @Override
+    public ResponseEntity<Issue> getData(int id) {
         //TODO: Hook into database dao.
 
         //Ex: issue = dao.getIssue(id);
@@ -36,16 +36,17 @@ public class IssueController {
         return new ResponseEntity<Issue>(issue, HttpStatus.OK);
     }
 
-    @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity addIssue(@RequestBody Issue issue) {
-        System.out.println(issue); //Debug
+    @Override
+    public ResponseEntity addData(Issue obj) {
+        System.out.println(obj); //Debug
 
         try {
             //TODO: Create issue and insert into database.
 
             //Ex: dao.addIssue(issue);
 
-            return ResponseEntity.created(new URI("http://localhost:8080/issues/" + issue.getId())).build();
+            //TODO: Fix hard-coded url.
+            return ResponseEntity.created(new URI("http://localhost:8080/issues/" + obj.getId())).build();
         } catch (Exception e) {
             return ResponseEntity.internalServerError().body("There was a problem creating issue.");
         }

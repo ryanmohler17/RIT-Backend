@@ -11,9 +11,9 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/users")
-public class UserController {
-    @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-    public List<User> getAllUsers() {
+public class UserController implements ObjectController<User> {
+    @Override
+    public List<User> getAllData() {
         //TODO: Hook into database dao.
 
         //Ex: users = dao.getAllUsers();
@@ -22,8 +22,8 @@ public class UserController {
         return users;
     }
 
-    @GetMapping(path="/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<User> getUser(@PathVariable int id) {
+    @Override
+    public ResponseEntity<User> getData(int id) {
         //TODO: Hook into database dao.
 
         //Ex: user = dao.getUser(id);
@@ -36,16 +36,17 @@ public class UserController {
         return new ResponseEntity<User>(user, HttpStatus.OK);
     }
 
-    @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity addUser(@RequestBody User user) {
-        System.out.println(user); //Debug
+    @Override
+    public ResponseEntity addData(User obj) {
+        System.out.println(obj); //Debug
 
         try {
             //TODO: Create user and insert into database.
 
             //Ex: dao.addUser(user);
 
-            return ResponseEntity.created(new URI("http://localhost:8080/users/" + user.getId())).build();
+            //TODO: Fix hard-coded url.
+            return ResponseEntity.created(new URI("http://localhost:8080/users/" + obj.getId())).build();
         } catch (Exception e) {
             return ResponseEntity.internalServerError().body("There was a problem creating user.");
         }
