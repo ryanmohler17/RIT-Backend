@@ -6,6 +6,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import java.net.URI;
 import java.util.List;
 
@@ -39,7 +40,7 @@ public class BoardController implements ObjectController<Board> {
     }
 
     @Override
-    public ResponseEntity addData(Board obj) {
+    public ResponseEntity addData(HttpServletRequest request, Board obj) {
         System.out.println(obj); //Debug
 
         try {

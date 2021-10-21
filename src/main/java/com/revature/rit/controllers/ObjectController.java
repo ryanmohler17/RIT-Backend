@@ -5,6 +5,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 public interface ObjectController<T> {
@@ -15,5 +16,5 @@ public interface ObjectController<T> {
     ResponseEntity<T> getData(@PathVariable int id);
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
-    ResponseEntity addData(@RequestBody T obj);
+    ResponseEntity addData(HttpServletRequest request, @RequestBody T obj);
 }

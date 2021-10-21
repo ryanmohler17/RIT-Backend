@@ -6,6 +6,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.servlet.http.HttpServletRequest;
 import java.net.URI;
 import java.util.List;
 
@@ -37,7 +38,7 @@ public class BoardListController implements ObjectController<BoardList> {
     }
 
     @Override
-    public ResponseEntity addData(BoardList obj) {
+    public ResponseEntity addData(HttpServletRequest request, BoardList obj) {
         System.out.println(obj); //Debug
 
         try {

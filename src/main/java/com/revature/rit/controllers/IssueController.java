@@ -6,6 +6,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import java.net.URI;
 import java.util.List;
 
@@ -37,7 +38,7 @@ public class IssueController implements ObjectController<Issue> {
     }
 
     @Override
-    public ResponseEntity addData(Issue obj) {
+    public ResponseEntity addData(HttpServletRequest request, Issue obj) {
         System.out.println(obj); //Debug
 
         try {
