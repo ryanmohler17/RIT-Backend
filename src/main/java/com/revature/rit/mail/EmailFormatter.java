@@ -18,7 +18,7 @@ import java.util.regex.Pattern;
 @Service
 public class EmailFormatter {
 
-    Pattern pattern = Pattern.compile("\\{(?<var>\\s?\\w*\\s?)}");
+    Pattern pattern = Pattern.compile("\\{\\s?(?<var>\\w*)\\s?}");
 
     public String formatEmail(InputStream htmlFile, Map<String, Object> variables) throws IOException {
         BufferedReader reader = new BufferedReader(new InputStreamReader(htmlFile));

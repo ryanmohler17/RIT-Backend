@@ -43,7 +43,6 @@ public class SendgridEmailer implements GenericEmailer {
         request.setEndpoint("mail/send");
         request.setBody(mail.build());
         Response response = sendGrid.api(request);
-        System.out.println(response.getStatusCode());
 
         return new MailResult(response.getStatusCode());
     }
