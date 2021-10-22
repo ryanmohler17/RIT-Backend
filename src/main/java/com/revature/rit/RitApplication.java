@@ -9,5 +9,4 @@ public class RitApplication {
     public static void main(String[] args) {
         SpringApplication.run(RitApplication.class, args);
     }
-
 }
