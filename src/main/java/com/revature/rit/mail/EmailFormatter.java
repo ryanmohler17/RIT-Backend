@@ -1,5 +1,8 @@
 package com.revature.rit.mail;
 
+import org.springframework.context.annotation.Bean;
+import org.springframework.stereotype.Service;
+
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -12,6 +15,7 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+@Service
 public class EmailFormatter {
 
     Pattern pattern = Pattern.compile("\\{(?<var>\\s?\\w*\\s?)}");

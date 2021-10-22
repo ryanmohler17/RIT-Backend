@@ -6,16 +6,21 @@ import com.sendgrid.Response;
 import com.sendgrid.SendGrid;
 import com.sendgrid.helpers.mail.Mail;
 import com.sendgrid.helpers.mail.objects.Content;
-import lombok.AllArgsConstructor;
+import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.io.InputStream;
 
-@AllArgsConstructor
+@Service
 public class SendgridEmailer implements GenericEmailer {
 
     private EmailFormatter formatter;
     private String sendgridApiKey;
+
+    public SendgridEmailer(EmailFormatter formatter, SendGridEmailerConfig config) {
+        this.formatter = formatter;
+        this.sendgridApiKey = config.getApiKey();
+    }
 
     @Override
     public MailResult sendEmail(RitEmail email) throws IOException {
