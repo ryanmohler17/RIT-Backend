@@ -6,6 +6,7 @@ import com.sendgrid.Response;
 import com.sendgrid.SendGrid;
 import com.sendgrid.helpers.mail.Mail;
 import com.sendgrid.helpers.mail.objects.Content;
+import lombok.Setter;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
@@ -14,12 +15,14 @@ import java.io.InputStream;
 @Service
 public class SendgridEmailer implements GenericEmailer {
 
+    @Setter
     private EmailFormatter formatter;
-    private String sendgridApiKey;
+    @Setter
+    private SendGrid sendGrid;
 
     public SendgridEmailer(EmailFormatter formatter, SendGridEmailerConfig config) {
         this.formatter = formatter;
-        this.sendgridApiKey = config.getApiKey();
+        sendGrid = new SendGrid(config.getApiKey());
     }
 
     @Override
@@ -36,7 +39,6 @@ public class SendgridEmailer implements GenericEmailer {
             mail.setReplyTo(email.getReplyToEmail());
         }
 
-        SendGrid sendGrid = new SendGrid(sendgridApiKey);
         Request request = new Request();
 
         request.setMethod(Method.POST);
