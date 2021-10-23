@@ -2,3 +2,5 @@
 twilio:
   send-grid:
     api-key: ${SENDGRID_KEY}
+
+email: 'rits@weeryan17.com'

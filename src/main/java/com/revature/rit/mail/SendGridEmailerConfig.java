@@ -11,4 +11,8 @@ public class SendGridEmailerConfig {
     @Getter
     private String apiKey;
 
+    @Value("${email}")
+    @Getter
+    private String fromEmail;
+
 }

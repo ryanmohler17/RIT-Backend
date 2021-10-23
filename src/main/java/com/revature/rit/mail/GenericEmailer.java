@@ -7,4 +7,6 @@ public interface GenericEmailer {
 
     MailResult sendEmail(RitEmail email) throws IOException;
 
+    void init();
+
 }
