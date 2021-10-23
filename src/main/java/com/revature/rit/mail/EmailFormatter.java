@@ -24,12 +24,19 @@ public class EmailFormatter {
         BufferedReader reader = new BufferedReader(new InputStreamReader(htmlFile));
         String line;
         StringBuilder fileBuilder = new StringBuilder();
+        boolean first = true;
         while ((line = reader.readLine()) != null) {
+            if (!first) {
+                fileBuilder.append('\n');
+            } else {
+                first = false;
+            }
             Matcher matcher = pattern.matcher(line);
             while (matcher.find()) {
                 String var = matcher.group("var");
                 Object item = variables.get(var);
                 line = matcher.replaceFirst(String.valueOf(item));
+                matcher = pattern.matcher(line);
             }
             fileBuilder.append(line);
         }

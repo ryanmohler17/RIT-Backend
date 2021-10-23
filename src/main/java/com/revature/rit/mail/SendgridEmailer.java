@@ -17,11 +17,16 @@ public class SendgridEmailer implements GenericEmailer {
 
     @Setter
     private EmailFormatter formatter;
+    private SendGridEmailerConfig config;
     @Setter
     private SendGrid sendGrid;
 
     public SendgridEmailer(EmailFormatter formatter, SendGridEmailerConfig config) {
         this.formatter = formatter;
+        this.config = config;
+    }
+
+    public void init() {
         sendGrid = new SendGrid(config.getApiKey());
     }
 
