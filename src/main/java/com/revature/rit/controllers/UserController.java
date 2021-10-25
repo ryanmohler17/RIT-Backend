@@ -1,13 +1,16 @@
 package com.revature.rit.controllers;
 
 import com.revature.rit.models.users.User;
-<<<<<<< HEAD
-import com.revature.rit.repos.UserRepository;
+import com.revature.rit.reposistory.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
 
 @CrossOrigin(origins = "http://localhost:8080")
@@ -19,7 +22,7 @@ public class UserController {
     @Autowired
     UserRepository userRepository;
 
-    @PostMapping("/users")
+    @PostMapping("/users/createUser")
     public ResponseEntity<User> createUser(@RequestBody User user) {
         try {
             User _user = userRepository
@@ -30,8 +33,20 @@ public class UserController {
         }
     }
 
+    @GetMapping("/users/getAllUsers")
+    public ResponseEntity<List<User>> getAllUsers() {
+        try {
+            List<User> userList = new ArrayList<User>();
+            Iterable<User> users = userRepository.findAll();
+            users.forEach(userList::add);
+            return new ResponseEntity<>(userList, HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
     @GetMapping("/users/getUserById/{id}")
-    public ResponseEntity<User> getUserById(@PathVariable("id") int id) {
+    public ResponseEntity<User> getUserById(@PathVariable("id") Integer id) {
         Optional<User> userData = userRepository.findById(id);
 
         if (userData.isPresent()) {
@@ -41,7 +56,7 @@ public class UserController {
         }
     }
 
-    @GetMapping("/users/getByUsername/{username}")
+    @GetMapping("/users/getUserByUsername/{username}")
     public ResponseEntity<User> getUserByUsername(@PathVariable("username") String username) {
         Optional<User> userData = userRepository.findByUsername(username);
 
@@ -52,25 +67,32 @@ public class UserController {
         }
     }
 
-    @PutMapping("/users/{id}")
-    public ResponseEntity<User> updateUser(@PathVariable("id") int id, @RequestBody User user) {
+    @PatchMapping("/users/updateUser/{id}")
+    public ResponseEntity<User> updateUser(@PathVariable("id") Integer id, @RequestBody User user) {
+        List<String> availableFields = Arrays.asList("username","password","email","userLevel");
         Optional<User> userData = userRepository.findById(id);
 
         if (userData.isPresent()) {
             User _user = userData.get();
-            _user.setUsername(user.getUsername());
-            _user.setPassword(user.getPassword());
-            _user.setEmail(user.getEmail());
-            _user.setUserLevel(user.getUserLevel());
+            for (String field : availableFields) {
+                switch (field){
+                    case "username": if (user.getUsername() != null) _user.setUsername(user.getUsername()); break;
+                    case "password": if (user.getPassword() != null) _user.setPassword(user.getPassword()); break;
+                    case "email": if (user.getEmail() != null) _user.setEmail(user.getEmail()); break;
+                    case "userLevel": if (user.getUserLevel() != null) _user.setUserLevel(user.getUserLevel()); break;
+                }
+            }
             return new ResponseEntity<>(userRepository.save(_user), HttpStatus.OK);
         } else {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-=======
+        }
+    }
+}
+
+/*import com.revature.rit.models.users.User;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
 import javax.servlet.http.HttpServletRequest;
 import java.net.URI;
 import java.util.List;
@@ -78,8 +100,10 @@ import java.util.List;
 @RestController
 @RequestMapping("/users")
 public class UserController implements ObjectController<User> {
+
     @Override
     public List<User> getAllData() {
+
         //TODO: Hook into database dao.
 
         //Ex: users = dao.getAllUsers();
@@ -115,7 +139,6 @@ public class UserController implements ObjectController<User> {
             return ResponseEntity.created(new URI("http://localhost:8080/users/" + obj.getId())).build();
         } catch (Exception e) {
             return ResponseEntity.internalServerError().body("There was a problem creating user.");
->>>>>>> master
         }
     }
-}
+}*/

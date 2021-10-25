@@ -1,6 +1,9 @@
 package com.revature.rit.controllers;
 
-import com.revature.rit.models.issues.StatusAction;
+public class StatusActionController {
+}
+
+/*import com.revature.rit.models.issues.StatusAction;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -52,4 +55,4 @@ public class StatusActionController implements ObjectController<StatusAction> {
             return ResponseEntity.internalServerError().body("There was a problem creating status action.");
         }
     }
-}
+}*/

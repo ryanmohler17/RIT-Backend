@@ -1,19 +1,16 @@
 package com.revature.rit.models.boards;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import com.revature.rit.models.users.User;
 import lombok.*;
+import org.springframework.beans.factory.annotation.Autowired;
 import javax.persistence.*;
 import java.time.LocalDateTime;
-import java.time.ZonedDateTime;
-import java.util.List;
 
-@Data
 @Entity
-@NoArgsConstructor
-@AllArgsConstructor
-//@RequiredArgsConstructor
 @Table(name = "board")
+@Data
+@AllArgsConstructor(onConstructor = @__(@Autowired))
+@NoArgsConstructor
 public class Board {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -27,21 +24,16 @@ public class Board {
     private String description;
 
     @ManyToOne
-    //@Column(name = "creator")
-    @JoinColumn(foreignKey = @ForeignKey(name = "user_id"))
+    @JoinColumn(name = "user_id_fk")
     private User creator;
 
     @Column(name = "created_at")
-    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss.SSSZ", shape = JsonFormat.Shape.STRING)
     private LocalDateTime createdAt;
 
-    public Board(String title, String description, Integer creatorId, LocalDateTime createdAt) {
+    public Board(String title, String description, User user) {
         this.title = title;
         this.description = description;
-        this.creator.setId(creatorId);
-        this.createdAt = createdAt;
+        this.creator = user;
+        this.createdAt = LocalDateTime.now();
     }
-
-    /*private List<User> users;
-    private List<BoardList> lists;*/
 }

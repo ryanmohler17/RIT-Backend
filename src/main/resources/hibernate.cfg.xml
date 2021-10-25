@@ -19,8 +19,12 @@
 
         <property name="hibernate.temp.use_jdbc_metadata_defaults">false</property>
 
-        <mapping class="org.example.models.User"/>
-        <mapping class="org.example.models.TicketType"/>
-        <mapping class="org.example.models.Ticket"/>
+        <mapping class="com.revature.rit.models.users.User"/>
+        <mapping class="com.revature.rit.models.boards.Board"/>
+        <mapping class="com.revature.rit.models.boards.BoardList"/>
+        <mapping class="com.revature.rit.models.issues.CommentAction"/>
+        <mapping class="com.revature.rit.models.issues.Issue"/>
+        <mapping class="com.revature.rit.models.issues.IssueAction"/>
+        <mapping class="com.revature.rit.models.issues.StatusAction"/>
     </session-factory>
 </hibernate-configuration>

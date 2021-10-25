@@ -1,32 +1,29 @@
-package com.revature.rit.models.issues;
+package com.revature.rit.models.boards;
 
-import com.revature.rit.models.users.User;
+import com.revature.rit.models.issues.Issue;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+
 import javax.persistence.*;
-import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "issues_action")
+@Table(name = "list_items")
 @Data
 @AllArgsConstructor(onConstructor = @__(@Autowired))
 @NoArgsConstructor
-public class IssueAction {
+public class ListItems {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "issue_action_id")
+    @Column(name = "list_item_id")
     private Integer id;
-
-    @ManyToOne
-    @JoinColumn(name = "user_id_fk")
-    private User user;
 
     @ManyToOne
     @JoinColumn(name = "issue_id_fk")
     private Issue issue;
 
-    @Column(name = "done_at")
-    private LocalDateTime doneAt;
+    @ManyToOne
+    @JoinColumn(name = "board_list_id_fk")
+    private BoardList boardList;
 }

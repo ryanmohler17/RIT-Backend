@@ -1,13 +1,19 @@
 package com.revature.rit.models.boards;
 
-import com.revature.rit.models.issues.Issue;
+import com.fasterxml.jackson.annotation.*;
+import lombok.AllArgsConstructor;
 import lombok.Data;
-
+import lombok.NoArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import javax.persistence.*;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
-@Data
+@Entity
 @Table(name = "board_list")
+@Data
+@AllArgsConstructor(onConstructor = @__(@Autowired))
+@NoArgsConstructor
 public class BoardList {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -17,9 +23,16 @@ public class BoardList {
     @Column(name = "title", columnDefinition = "TEXT")
     private String title;
 
-    @Column(name = "board_id_fk")
-    @JoinColumn(foreignKey = @ForeignKey(name = "board_id"))
+    @ManyToOne
+    @JoinColumn(name = "board_id_fk")
     private Board board;
 
-    private List<Issue> issues;
+    public BoardList(String title, Board board) {
+        this.title = title;
+        this.board = board;
+    }
+
+    @OneToMany(mappedBy = "boardList")
+    @JsonIgnore
+    private Set<ListItems> issuesList = new HashSet<>();
 }

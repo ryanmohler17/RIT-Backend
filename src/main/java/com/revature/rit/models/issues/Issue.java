@@ -1,16 +1,22 @@
 package com.revature.rit.models.issues;
 
-import com.revature.rit.models.issues.types.IssueCategory;
-import com.revature.rit.models.issues.types.IssueSeverity;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.revature.rit.models.boards.ListItems;
 import com.revature.rit.models.users.User;
+import lombok.AllArgsConstructor;
 import lombok.Data;
-
+import lombok.NoArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import javax.persistence.*;
 import java.time.LocalDateTime;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
-@Data
+@Entity
 @Table(name = "issues")
+@Data
+@AllArgsConstructor(onConstructor = @__(@Autowired))
+@NoArgsConstructor
 public class Issue {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -23,20 +29,23 @@ public class Issue {
     @Column(name = "issue_description", columnDefinition = "TEXT")
     private String description;
 
-    @Enumerated(EnumType.STRING)
-    private IssueCategory category;
+    @Column(name = "issue_category")
+    private String category;
 
     @ManyToOne
-    @Column(name = "issue_creator")
-    @JoinColumn(foreignKey = @ForeignKey(name = "user_id"))
+    @JoinColumn(name = "issue_creator")
     private User creator;
 
     @Column(name = "created_at")
     private LocalDateTime createdAt;
 
-    @Enumerated(EnumType.STRING)
-    private IssueSeverity issueSeverity;
+    @Column(name = "issue_severity")
+    private String issueSeverity;
 
-    private List<IssueAction> actions;
-    private List<String> labels;
+    @Column(name = "issue_status")
+    private String issueStatus;
+
+    @OneToMany(mappedBy = "issue")
+    @JsonIgnore
+    private Set<ListItems> boardsList = new HashSet<>();
 }

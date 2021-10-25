@@ -1,12 +1,19 @@
 package com.revature.rit.models.issues;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.AllArgsConstructor;
 import lombok.Data;
-
+import lombok.NoArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import javax.persistence.*;
+import java.util.Collection;
 
-@Data
+@Entity
 @Table(name = "comments_action")
-public class CommentAction extends IssueAction {
+@Data
+@AllArgsConstructor(onConstructor = @__(@Autowired))
+@NoArgsConstructor
+public class CommentAction {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "comment_id")
@@ -15,7 +22,22 @@ public class CommentAction extends IssueAction {
     @Column(name = "comment_action", columnDefinition = "TEXT")
     private String comment;
 
-    @Column(name = "reply_to")
-    @JoinColumn(foreignKey = @ForeignKey(name = "comment_id"))
-    private IssueAction replyTo;
+    @ManyToOne
+    private CommentAction parentComment;
+
+    @JsonIgnore
+    @OneToMany
+    @JoinColumn(name = "reply_to")
+    private Collection<CommentAction> childComment;
+
+    @OneToOne
+    @JoinColumn(name = "issue_action_id_fk")
+    private IssueAction issueAction;
+
+    public CommentAction(String comment, CommentAction parentComment, Collection<CommentAction> childComment, IssueAction issueAction) {
+        this.comment = comment;
+        this.parentComment = parentComment;
+        this.childComment = childComment;
+        this.issueAction = issueAction;
+    }
 }
