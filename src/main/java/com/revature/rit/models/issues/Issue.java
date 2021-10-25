@@ -1,7 +1,7 @@
 package com.revature.rit.models.issues;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.revature.rit.models.boards.ListItems;
+import com.revature.rit.models.boards.BoardList;
 import com.revature.rit.models.users.User;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -45,7 +45,6 @@ public class Issue {
     @Column(name = "issue_status")
     private String issueStatus;
 
-    @OneToMany(mappedBy = "issue")
-    @JsonIgnore
-    private Set<ListItems> boardsList = new HashSet<>();
+    @ManyToMany(mappedBy = "issues")
+    private Set<BoardList> boardsList = new HashSet<>();
 }

@@ -1,7 +1,6 @@
 package com.revature.rit.controllers;
 
 import com.revature.rit.models.boards.BoardList;
-import com.revature.rit.models.boards.ListItems;
 import com.revature.rit.models.issues.Issue;
 import com.revature.rit.models.issues.request.IssueInput;
 import com.revature.rit.models.users.User;
@@ -36,9 +35,6 @@ public class IssueController {
     @Autowired
     BoardListRepository boardListRepository;
 
-    @Autowired
-    ListItemsRepository listItemsRepository;
-
     @PostMapping("/issues/createIssue")
     public ResponseEntity createIssue(@RequestBody IssueInput issue) {
         try {
@@ -64,10 +60,6 @@ public class IssueController {
             // If BoardList then Create Relationship
             if (issue.getBoardListId() != null) {
                 BoardList boardList = boardListRepository.findById(issue.getBoardListId()).get();
-                ListItems newListItem = new ListItems();
-                newListItem.setIssue(_issue);
-                newListItem.setBoardList(boardList);
-                listItemsRepository.save(newListItem);
             }
             return new ResponseEntity<>(_issue, HttpStatus.CREATED);
         } catch (Exception e) {

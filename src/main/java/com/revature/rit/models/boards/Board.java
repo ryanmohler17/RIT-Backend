@@ -5,6 +5,7 @@ import lombok.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Table(name = "board")
@@ -29,6 +30,14 @@ public class Board {
 
     @Column(name = "created_at")
     private LocalDateTime createdAt;
+
+    @ManyToMany
+    @JoinTable(
+            name = "board_users",
+            joinColumns = {@JoinColumn(name = "board_id_fk")},
+            inverseJoinColumns = {@JoinColumn(name = "user_id_fk")}
+    )
+    private List<User> users;
 
     public Board(String title, String description, User user) {
         this.title = title;

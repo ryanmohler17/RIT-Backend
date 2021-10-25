@@ -1,7 +1,9 @@
 package com.revature.rit.models.users;
 
+import com.revature.rit.models.boards.Board;
 import lombok.*;
 import javax.persistence.*;
+import java.util.List;
 
 @Data
 @Entity
@@ -31,4 +33,7 @@ public class User {
     @Column(name="user_level")
     @Enumerated(EnumType.STRING)
     @NonNull private UserLevel userLevel;
+
+    @ManyToMany(mappedBy = "users")
+    private List<Board> boards;
 }
