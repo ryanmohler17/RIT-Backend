@@ -1,8 +1,10 @@
 /*	status_action table	*/
 CREATE TABLE status_action(
-	status_id SMALLINT PRIMARY KEY NOT NULL,
+	status_id SERIAL PRIMARY KEY NOT NULL,
 	status_name VARCHAR(15) NOT NULL
 );
+SELECT * FROM status_action;
+--DROP TABLE status_action; 
 
 INSERT INTO status_action VALUES (1,'Pending');
 INSERT INTO status_action VALUES (2,'In-Progress');
@@ -18,6 +20,7 @@ CREATE TABLE users(
 	avatar VARCHAR(30),
 	user_level VARCHAR(15)
 );
+SELECT * FROM users; -- WHERE user_id = 1;
 
 /*	issues table	*/
 CREATE TABLE issues(
@@ -38,22 +41,26 @@ CREATE TABLE issues_labels(
 	issue_id_fk INTEGER REFERENCES issues(issue_id) NOT NULL,
 	issue_label VARCHAR(20) NULL
 );
+SELECT * FROM issues_labels;
 
 /*	actions table	*/
 CREATE TABLE actions(
 	action_id SERIAL PRIMARY KEY NOT NULL,
 	action_name VARCHAR(250)
 );
+SELECT * FROM actions;
 
 /*	issues_action table	*/
 CREATE TABLE issues_action(
 	issue_action_id SERIAL PRIMARY KEY NOT NULL,
 	user_id_fk INTEGER REFERENCES users(user_id) NOT NULL,
 	issue_id_fk INTEGER REFERENCES issues(issue_id) NOT NULL,
-	action_id_fk INTEGER REFERENCES actions(action_id) NOT NULL,
+	action_type VARCHAR(250),
 	done_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 SELECT * FROM issues_action;
+--ALTER TABLE issues_action DROP COLUMN action_id_fk;
+--ALTER TABLE issues_action ADD COLUMN action_type VARCHAR(250); 
 
 /*	comment_action table	*/
 CREATE TABLE comments_action(
@@ -63,6 +70,7 @@ CREATE TABLE comments_action(
 	issue_action_id_fk INTEGER REFERENCES issues_action(issue_action_id) NOT NULL
 );
 SELECT * FROM comments_action;
+--ALTER TABLE comments_action DROP COLUMN action_type;
 
 /*	board table	*/
 CREATE TABLE board(
@@ -79,6 +87,7 @@ CREATE TABLE board_users(
 	board_id_fk INTEGER REFERENCES board(board_id) NOT NULL,
 	user_id_fk INTEGER REFERENCES users(user_id) NOT NULL
 );
+SELECT * FROM board_users;
 
 /*	board_list table	*/
 CREATE TABLE board_list(

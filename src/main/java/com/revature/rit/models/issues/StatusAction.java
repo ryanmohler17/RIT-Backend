@@ -9,7 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import javax.persistence.*;
 
 @Entity
-//@Table(name = "status_action")
+@Table(name = "status_action")
 @Data
 @AllArgsConstructor(onConstructor = @__(@Autowired))
 @NoArgsConstructor
@@ -17,7 +17,7 @@ public class StatusAction {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "status_id")
-    private IssueStatus status;
+    private Integer id;
 
     @Column(name = "status_name")
     private String statusName;

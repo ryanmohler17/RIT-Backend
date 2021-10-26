@@ -1,9 +1,9 @@
 package com.revature.rit.reposistory;
 
-import com.revature.rit.models.issues.CommentAction;
+import com.revature.rit.models.issues.IssueAction;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface CommentActionRepository extends CrudRepository<CommentAction, Integer> {
+public interface IssueActionRepository extends CrudRepository<IssueAction, Integer> {
 }

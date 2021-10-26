@@ -1,12 +1,14 @@
 package com.revature.rit.models.boards;
 
 import com.fasterxml.jackson.annotation.*;
+import com.revature.rit.models.issues.Issue;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import javax.persistence.*;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -27,12 +29,20 @@ public class BoardList {
     @JoinColumn(name = "board_id_fk")
     private Board board;
 
+    @ManyToMany
+    @JoinTable(
+            name = "list_items",
+            joinColumns = {@JoinColumn(name = "board_list_id_fk")},
+            inverseJoinColumns = {@JoinColumn(name = "issue_id_fk")}
+    )
+    private List<Issue> issues;
+
     public BoardList(String title, Board board) {
         this.title = title;
         this.board = board;
     }
 
-    @OneToMany(mappedBy = "boardList")
+    /*@OneToMany(mappedBy = "boardList")
     @JsonIgnore
-    private Set<ListItems> issuesList = new HashSet<>();
+    private Set<ListItems> issuesList = new HashSet<>();*/
 }

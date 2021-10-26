@@ -29,4 +29,7 @@ public class IssueAction {
 
     @Column(name = "done_at")
     private LocalDateTime doneAt;
+
+    @Column(name = "action_type")
+    private String actionType;
 }
