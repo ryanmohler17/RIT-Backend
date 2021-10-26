@@ -35,12 +35,6 @@ public class IssueController {
     @Autowired
     BoardListRepository boardListRepository;
 
-<<<<<<< HEAD
-    /*@Autowired
-    ListItemsRepository listItemsRepository;*/
-
-=======
->>>>>>> 4649c0ff55abd0d387f2d63596dc0d16209e6fab
     @PostMapping("/issues/createIssue")
     public ResponseEntity createIssue(@RequestBody IssueInput issue) {
         try {
@@ -67,13 +61,6 @@ public class IssueController {
             // If BoardList then Create Relationship
             if (issue.getBoardListId() != null) {
                 BoardList boardList = boardListRepository.findById(issue.getBoardListId()).get();
-<<<<<<< HEAD
-                /*ListItems newListItem = new ListItems();
-                newListItem.setIssue(_issue);
-                newListItem.setBoardList(boardList);
-                listItemsRepository.save(newListItem);*/
-=======
->>>>>>> 4649c0ff55abd0d387f2d63596dc0d16209e6fab
             }
             return new ResponseEntity<>(_issue, HttpStatus.CREATED);
         } catch (Exception e) {

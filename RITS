@@ -3,13 +3,6 @@ CREATE TABLE status_action(
 	status_id SERIAL PRIMARY KEY NOT NULL,
 	status_name VARCHAR(15) NOT NULL
 );
-SELECT * FROM status_action;
---DROP TABLE status_action; 
-
-INSERT INTO status_action VALUES (1,'Pending');
-INSERT INTO status_action VALUES (2,'In-Progress');
-INSERT INTO status_action VALUES (3,'Closed');
-INSERT INTO status_action VALUES (4,'Resolved');
 
 /*	users table	*/
 CREATE TABLE users(
@@ -20,7 +13,6 @@ CREATE TABLE users(
 	avatar VARCHAR(30),
 	user_level VARCHAR(15)
 );
-SELECT * FROM users; -- WHERE user_id = 1;
 
 /*	issues table	*/
 CREATE TABLE issues(
@@ -33,7 +25,6 @@ CREATE TABLE issues(
 	issue_status VARCHAR(25) NOT NULL,
 	created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
-SELECT * FROM issues;
 
 /*	issues_labels table	*/
 CREATE TABLE issues_labels(
@@ -41,14 +32,12 @@ CREATE TABLE issues_labels(
 	issue_id_fk INTEGER REFERENCES issues(issue_id) NOT NULL,
 	issue_label VARCHAR(20) NULL
 );
-SELECT * FROM issues_labels;
 
 /*	actions table	*/
 CREATE TABLE actions(
 	action_id SERIAL PRIMARY KEY NOT NULL,
 	action_name VARCHAR(250)
 );
-SELECT * FROM actions;
 
 /*	issues_action table	*/
 CREATE TABLE issues_action(
@@ -58,9 +47,6 @@ CREATE TABLE issues_action(
 	action_type VARCHAR(250),
 	done_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
-SELECT * FROM issues_action;
---ALTER TABLE issues_action DROP COLUMN action_id_fk;
---ALTER TABLE issues_action ADD COLUMN action_type VARCHAR(250); 
 
 /*	comment_action table	*/
 CREATE TABLE comments_action(
@@ -69,8 +55,6 @@ CREATE TABLE comments_action(
 	reply_to INTEGER REFERENCES comments_action(comment_id) NULL,
 	issue_action_id_fk INTEGER REFERENCES issues_action(issue_action_id) NOT NULL
 );
-SELECT * FROM comments_action;
---ALTER TABLE comments_action DROP COLUMN action_type;
 
 /*	board table	*/
 CREATE TABLE board(
@@ -87,7 +71,6 @@ CREATE TABLE board_users(
 	board_id_fk INTEGER REFERENCES board(board_id) NOT NULL,
 	user_id_fk INTEGER REFERENCES users(user_id) NOT NULL
 );
-SELECT * FROM board_users;
 
 /*	board_list table	*/
 CREATE TABLE board_list(
@@ -95,8 +78,6 @@ CREATE TABLE board_list(
 	title VARCHAR(250) NOT NULL,
 	board_id_fk INTEGER REFERENCES board(board_id) NOT NULL
 );
-SELECT * FROM board_list;
---ALTER TABLE board_list DROP COLUMN board_board_id;
 
 /*	list_items table	*/
 CREATE TABLE list_items(
@@ -104,16 +85,3 @@ CREATE TABLE list_items(
 	issue_id_fk INTEGER REFERENCES issues(issue_id) NOT NULL,
 	board_list_id_fk INTEGER REFERENCES board_list(board_list_id) NOT NULL
 );
-SELECT * FROM list_items;
-INSERT INTO list_items VALUES (DEFAULT,1,2);
-SELECT * FROM issues;
-SELECT * FROM board_list;
-
-
-
-
-
-
-
-
-
