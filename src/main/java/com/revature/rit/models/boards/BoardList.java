@@ -42,7 +42,11 @@ public class BoardList {
         this.board = board;
     }
 
+<<<<<<< HEAD
     /*@OneToMany(mappedBy = "boardList")
     @JsonIgnore
     private Set<ListItems> issuesList = new HashSet<>();*/
+=======
+
+>>>>>>> 4649c0ff55abd0d387f2d63596dc0d16209e6fab
 }
