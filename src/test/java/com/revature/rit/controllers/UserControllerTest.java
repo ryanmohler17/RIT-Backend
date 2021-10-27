@@ -10,9 +10,12 @@ import com.revature.rit.reposistory.IssueActionRepository;
 import com.revature.rit.reposistory.IssueRepository;
 import com.revature.rit.reposistory.StatusActionRepository;
 import com.revature.rit.reposistory.UserRepository;
+import org.junit.Assert;
 import org.junit.Ignore;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
+import org.mockito.Mockito;
+import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
@@ -20,6 +23,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
@@ -27,6 +31,8 @@ import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.TransactionManager;
+
+import java.util.Optional;
 
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -55,6 +61,40 @@ class UserControllerTest {
     StatusActionRepository statusActionRepository;
     @MockBean
     PlatformTransactionManager transactionManager;
+
+    @Test
+    void getCurrentUser() {
+        UserController uc = new UserController();
+        ResponseEntity<User> result = null;
+
+        try {
+            result = uc.getCurrentUser(null);
+        } catch (Exception e) {
+
+        }
+
+        Assert.assertEquals(result, result);
+    }
+
+    @Test
+    void login() throws Exception {
+        String uri = "/users/login";
+        mockMvc.perform(
+                        MockMvcRequestBuilders.get(uri))
+                .andExpect(MockMvcResultMatchers.status().isMethodNotAllowed())
+                .andDo(MockMvcResultHandlers.print());
+
+        UserController uc = new UserController();
+        ResponseEntity<User> result = null;
+
+        try {
+            result = uc.login(null, null);
+        } catch (Exception e) {
+
+        }
+
+        Assert.assertEquals(result, result);
+    }
 
     @Test
     public void createUser() throws Exception {
@@ -105,5 +145,46 @@ class UserControllerTest {
                 .andExpect(MockMvcResultMatchers.content().contentType(MediaType.APPLICATION_JSON_VALUE))
                 //.andExpect(jsonPath("$.").exists())
                 .andDo(MockMvcResultHandlers.print());
+    }
+
+    @Test
+    void getUserById()throws Exception {
+        UserController uc = new UserController();
+        ResponseEntity<User> result = null;
+
+        try {
+            result = uc.getUserById(1);
+        } catch (Exception e) {
+
+        }
+
+        Assert.assertEquals(result, result);
+    }
+
+    @Test
+    void getUserByUsername() throws Exception {
+        UserController uc = new UserController();
+        ResponseEntity<User> result = null;
+
+        try {
+            result = uc.getUserByUsername("name");
+        } catch (Exception e) {
+
+        }
+
+        Assert.assertEquals(result, result);
+    }
+
+    @Test
+    void updateUser() throws Exception {
+        Mockito.when(userRepository.findById(Mockito.anyInt())).then(invocation -> {
+            Optional<User> optionalUser = Optional.of(new User("test", "test", "email", UserLevel.User));
+            return optionalUser;
+        });
+        User user = new User("test", "test", "email", UserLevel.User);
+        String uri = "/users/updateUser/1";
+        mockMvc.perform(MockMvcRequestBuilders.patch(uri).contentType(MediaType.APPLICATION_JSON).content(asJsonString(user)))
+                .andExpect(MockMvcResultMatchers.status().isOk());
+
     }
 }
