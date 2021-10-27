@@ -28,11 +28,11 @@ public class UserController {
 
     @GetMapping("/current")
     public ResponseEntity getCurrentUser(HttpServletRequest request) {
-        Cookie cookie = WebUtils.getCookie(request, "id");
-        if (cookie == null) {
+        String header = request.getHeader("id");
+        if (header.equals("null")) {
             return new ResponseEntity(HttpStatus.FORBIDDEN);
         } else {
-            return new ResponseEntity(userRepository.findById(Integer.parseInt(cookie.getValue())).get(), HttpStatus.OK);
+            return new ResponseEntity(userRepository.findById(Integer.parseInt(header)).get(), HttpStatus.OK);
         }
     }
 
@@ -44,9 +44,7 @@ public class UserController {
         } else {
             User check = checkOpt.get();
             if (check.getPassword().equals(user.getPassword())) {
-                Cookie cookie = new Cookie("id", check.getId().toString());
-                response.addCookie(cookie);
-                return new ResponseEntity(HttpStatus.OK);
+                return new ResponseEntity(check.getId().toString(), HttpStatus.OK);
             } else {
                 return new ResponseEntity(HttpStatus.FORBIDDEN);
             }

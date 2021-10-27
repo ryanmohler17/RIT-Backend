@@ -38,7 +38,7 @@ public class IssueController {
     @PostMapping("/createIssue")
     public ResponseEntity createIssue(@RequestBody IssueInput issue) {
         try {
-            User user = userRepository.findById(issue.getCreator().getId()).get();
+            User user = userRepository.findById(issue.getCreatedBy().getId()).get();
             Issue newIssue = new Issue();
 
             // Insert Title
@@ -50,7 +50,7 @@ public class IssueController {
             // Insert Creator (User)
             newIssue.setCreator(user);
             // Insert Issue Severity
-            newIssue.setIssueSeverity(IssueSeverity.valueOf(issue.getIssueSeverity()).toString());
+            newIssue.setIssueSeverity(IssueSeverity.valueOf(issue.getSeverity()).toString());
             // Insert Issue Status
             newIssue.setIssueStatus(IssueStatus.valueOf("Open").toString());
             // Insert Created At
@@ -58,10 +58,6 @@ public class IssueController {
 
             Issue _issue = issueRepository.save(newIssue);
 
-            // If BoardList then Create Relationship
-            if (issue.getBoardListId() != null) {
-                BoardList boardList = boardListRepository.findById(issue.getBoardListId()).get();
-            }
             return new ResponseEntity<>(_issue, HttpStatus.CREATED);
         } catch (Exception e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);

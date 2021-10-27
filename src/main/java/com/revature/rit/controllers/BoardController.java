@@ -16,10 +16,10 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
-@CrossOrigin(origins = "http://localhost:8080")
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/board")
 @Transactional
+@CrossOrigin("*")
 public class BoardController {
 
     @Autowired
@@ -28,7 +28,7 @@ public class BoardController {
     @Autowired
     UserRepository userRepository;
 
-    @PostMapping("/board/createBoard")
+    @PostMapping("/createBoard")
     public ResponseEntity createBoard(@RequestBody Board board) {
         try {
             User user = userRepository.findById(board.getCreator().getId()).get();
@@ -41,7 +41,7 @@ public class BoardController {
         }
     }
 
-    @GetMapping("/board/getAllBoards")
+    @GetMapping("/getAllBoards")
     public ResponseEntity<List<Board>> getAllBoards() {
         try {
             List<Board> boardList = new ArrayList<Board>();
@@ -53,7 +53,7 @@ public class BoardController {
         }
     }
 
-    @GetMapping("/board/getBoardById/{id}")
+    @GetMapping("/getBoardById/{id}")
     public ResponseEntity<Board> getBoardById(@PathVariable("id") Integer id) {
         Optional<Board> boardData = boardRepository.findById(id);
 
@@ -64,7 +64,7 @@ public class BoardController {
         }
     }
 
-    @GetMapping("/board/getBoardByCreatorId/{creator}")
+    @GetMapping("/getBoardByCreatorId/{creator}")
     public ResponseEntity<Board> getBoardByCreator(@PathVariable("creator") User creator) {
         Optional<Board> boardData = boardRepository.findByCreatorId(creator.getId());
 
@@ -75,7 +75,7 @@ public class BoardController {
         }
     }
 
-    @PatchMapping("/board/updateBoard/{id}")
+    @PatchMapping("/updateBoard/{id}")
     public ResponseEntity<Board> updateBoard(@PathVariable("id") Integer id, @RequestBody Board board) {
         List<String> availableFields = Arrays.asList("title","description","creator");
         Optional<Board> boardData = boardRepository.findById(id);
