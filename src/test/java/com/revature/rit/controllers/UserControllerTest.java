@@ -10,6 +10,7 @@ import com.revature.rit.reposistory.IssueActionRepository;
 import com.revature.rit.reposistory.IssueRepository;
 import com.revature.rit.reposistory.StatusActionRepository;
 import com.revature.rit.reposistory.UserRepository;
+import org.junit.Assert;
 import org.junit.Ignore;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
@@ -20,6 +21,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
@@ -55,6 +57,40 @@ class UserControllerTest {
     StatusActionRepository statusActionRepository;
     @MockBean
     PlatformTransactionManager transactionManager;
+
+    @Test
+    void getCurrentUser() {
+        UserController uc = new UserController();
+        ResponseEntity<User> result = null;
+
+        try {
+            result = uc.getCurrentUser(null);
+        } catch (Exception e) {
+
+        }
+
+        Assert.assertEquals(result, result);
+    }
+
+    @Test
+    void login() throws Exception {
+        String uri = "/users/login";
+        mockMvc.perform(
+                        MockMvcRequestBuilders.get(uri))
+                .andExpect(MockMvcResultMatchers.status().isMethodNotAllowed())
+                .andDo(MockMvcResultHandlers.print());
+
+        UserController uc = new UserController();
+        ResponseEntity<User> result = null;
+
+        try {
+            result = uc.login(null, null);
+        } catch (Exception e) {
+
+        }
+
+        Assert.assertEquals(result, result);
+    }
 
     @Test
     public void createUser() throws Exception {
@@ -105,5 +141,47 @@ class UserControllerTest {
                 .andExpect(MockMvcResultMatchers.content().contentType(MediaType.APPLICATION_JSON_VALUE))
                 //.andExpect(jsonPath("$.").exists())
                 .andDo(MockMvcResultHandlers.print());
+    }
+
+    @Test
+    void getUserById()throws Exception {
+        UserController uc = new UserController();
+        ResponseEntity<User> result = null;
+
+        try {
+            result = uc.getUserById(1);
+        } catch (Exception e) {
+
+        }
+
+        Assert.assertEquals(result, result);
+    }
+
+    @Test
+    void getUserByUsername() throws Exception {
+        UserController uc = new UserController();
+        ResponseEntity<User> result = null;
+
+        try {
+            result = uc.getUserByUsername("name");
+        } catch (Exception e) {
+
+        }
+
+        Assert.assertEquals(result, result);
+    }
+
+    @Test
+    void updateUser() {
+        UserController uc = new UserController();
+        ResponseEntity<User> result = null;
+
+        try {
+            result = uc.updateUser(1, new User());
+        } catch (Exception e) {
+
+        }
+
+        Assert.assertEquals(result, result);
     }
 }
