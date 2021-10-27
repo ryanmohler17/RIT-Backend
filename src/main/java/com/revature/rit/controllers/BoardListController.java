@@ -15,10 +15,10 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
-@CrossOrigin(origins = "http://localhost:8080")
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/boardList")
 @Transactional
+@CrossOrigin("*")
 public class BoardListController {
 
     @Autowired
@@ -27,7 +27,7 @@ public class BoardListController {
     @Autowired
     BoardRepository boardRepository;
 
-    @PostMapping("/boardList/createBoardList")
+    @PostMapping("/createBoardList")
     public ResponseEntity createBoardList(@RequestBody BoardList boardList) {
         try {
             Board board = boardRepository.findById(boardList.getBoard().getId()).get();
@@ -39,7 +39,7 @@ public class BoardListController {
         }
     }
 
-    @GetMapping("/boardList/getAllBoardLists")
+    @GetMapping("/getAllBoardLists")
     public ResponseEntity<List<BoardList>> getAllBoardLists() {
         try {
             List<BoardList> boardLists = new ArrayList<BoardList>();
@@ -51,7 +51,7 @@ public class BoardListController {
         }
     }
 
-    @GetMapping("/boardList/getBoardListById/{id}")
+    @GetMapping("/getBoardListById/{id}")
     public ResponseEntity<BoardList> getBoardListById(@PathVariable("id") Integer id) {
         Optional<BoardList> boardListData = boardListRepository.findById(id);
 
@@ -62,7 +62,7 @@ public class BoardListController {
         }
     }
 
-    @PatchMapping("/boardList/updateBoardList/{id}")
+    @PatchMapping("/updateBoardList/{id}")
     public ResponseEntity<BoardList> updateBoardList(@PathVariable("id") Integer id, @RequestBody BoardList boardList) {
         List<String> availableFields = Arrays.asList("title","board");
         Optional<BoardList> boardListData = boardListRepository.findById(id);

@@ -1,6 +1,13 @@
 package com.revature.rit.mail;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.revature.rit.reposistory.BoardListRepository;
+import com.revature.rit.reposistory.BoardRepository;
+import com.revature.rit.reposistory.CommentActionRepository;
+import com.revature.rit.reposistory.IssueActionRepository;
+import com.revature.rit.reposistory.IssueRepository;
+import com.revature.rit.reposistory.StatusActionRepository;
+import com.revature.rit.reposistory.UserRepository;
 import com.sendgrid.Request;
 import com.sendgrid.Response;
 import com.sendgrid.SendGrid;
@@ -8,9 +15,15 @@ import com.sendgrid.helpers.mail.Mail;
 import com.sendgrid.helpers.mail.objects.Email;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.runner.RunWith;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
+import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.test.context.junit4.SpringRunner;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
@@ -20,8 +33,25 @@ import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+@RunWith(SpringRunner.class)
 @SpringBootTest
+@EnableAutoConfiguration(exclude={DataSourceAutoConfiguration.class})
 public class EmailerTests {
+
+    @MockBean
+    BoardRepository boardRepository;
+    @MockBean
+    UserRepository userRepository;
+    @MockBean
+    BoardListRepository boardListRepository;
+    @MockBean
+    CommentActionRepository commentActionRepository;
+    @MockBean
+    IssueActionRepository issueActionRepository;
+    @MockBean
+    IssueRepository issueRepository;
+    @MockBean
+    StatusActionRepository statusActionRepository;
 
     @Autowired
     private SendgridEmailer emailer;

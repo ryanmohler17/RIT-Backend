@@ -21,10 +21,10 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
-@CrossOrigin(origins = "http://localhost:8080")
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/comment")
 @Transactional
+@CrossOrigin("*")
 public class CommentActionController {
 
     @Autowired
@@ -39,7 +39,7 @@ public class CommentActionController {
     @Autowired
     UserRepository userRepository;
 
-    @PostMapping("/comment/createComment")
+    @PostMapping("/createComment")
     public ResponseEntity createComment(@RequestBody CommentInput commentInput) {
         try {
             Issue issue = issueRepository.findById(commentInput.getIssueId()).get();
@@ -68,7 +68,7 @@ public class CommentActionController {
         }
     }
 
-    @GetMapping("/comment/getAllComments")
+    @GetMapping("/getAllComments")
     public ResponseEntity<List<CommentAction>> getAllComments() {
         try {
             List<CommentAction> commentList = new ArrayList<CommentAction>();
@@ -80,7 +80,7 @@ public class CommentActionController {
         }
     }
 
-    @GetMapping("/comment/getCommentById/{id}")
+    @GetMapping("/getCommentById/{id}")
     public ResponseEntity<CommentAction> getCommentById(@PathVariable("id") Integer id) {
         Optional<CommentAction> commentData = commentActionRepository.findById(id);
 
@@ -91,7 +91,7 @@ public class CommentActionController {
         }
     }
 
-    @PatchMapping("/comment/updateComment/{id}")
+    @PatchMapping("/updateComment/{id}")
     public ResponseEntity<CommentAction> updateComment(@PathVariable("id") Integer id, @RequestBody CommentAction commentAction) {
         List<String> availableFields = Arrays.asList("comment");
         Optional<CommentAction> commentData = commentActionRepository.findById(id);

@@ -20,10 +20,10 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
-@CrossOrigin(origins = "http://localhost:8080")
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/issues")
 @Transactional
+@CrossOrigin("*")
 public class IssueController {
 
     @Autowired
@@ -35,7 +35,7 @@ public class IssueController {
     @Autowired
     BoardListRepository boardListRepository;
 
-    @PostMapping("/issues/createIssue")
+    @PostMapping("/createIssue")
     public ResponseEntity createIssue(@RequestBody IssueInput issue) {
         try {
             User user = userRepository.findById(issue.getCreator().getId()).get();
@@ -68,7 +68,7 @@ public class IssueController {
         }
     }
 
-    @GetMapping("/issues/getAllIssues")
+    @GetMapping("/getAllIssues")
     public ResponseEntity<List<Issue>> getAllIssues() {
         try {
             List<Issue> issuesList = new ArrayList<Issue>();
@@ -80,7 +80,7 @@ public class IssueController {
         }
     }
 
-    @GetMapping("/issues/getIssueById/{id}")
+    @GetMapping("/getIssueById/{id}")
     public ResponseEntity<Issue> getIssueById(@PathVariable("id") Integer id) {
         Optional<Issue> issueData = issueRepository.findById(id);
 
@@ -91,7 +91,7 @@ public class IssueController {
         }
     }
 
-    @PatchMapping("/issues/updateIssue/{id}")
+    @PatchMapping("/updateIssue/{id}")
     public ResponseEntity<Issue> updateIssue(@PathVariable("id") Integer id, @RequestBody Issue issue) {
         List<String> availableFields = Arrays.asList("title","description","category","issueSeverity","issueStatus","creator");
         Optional<Issue> issueData = issueRepository.findById(id);

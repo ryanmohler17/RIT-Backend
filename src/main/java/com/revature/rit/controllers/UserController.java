@@ -7,22 +7,53 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.util.WebUtils;
 
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
-@CrossOrigin(origins = "http://localhost:8080")
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/users")
 @Transactional
+@CrossOrigin("*")
 public class UserController {
 
     @Autowired
     UserRepository userRepository;
 
-    @PostMapping("/users/createUser")
+    @GetMapping("/current")
+    public ResponseEntity getCurrentUser(HttpServletRequest request) {
+        Cookie cookie = WebUtils.getCookie(request, "id");
+        if (cookie == null) {
+            return new ResponseEntity(HttpStatus.FORBIDDEN);
+        } else {
+            return new ResponseEntity(userRepository.findById(Integer.parseInt(cookie.getValue())).get(), HttpStatus.OK);
+        }
+    }
+
+    @PostMapping("/login")
+    public ResponseEntity login(@RequestBody User user, HttpServletResponse response) {
+        Optional<User> checkOpt = userRepository.findByUsername(user.getUsername());
+        if (!checkOpt.isPresent()) {
+            return new ResponseEntity(HttpStatus.FORBIDDEN);
+        } else {
+            User check = checkOpt.get();
+            if (check.getPassword().equals(user.getPassword())) {
+                Cookie cookie = new Cookie("id", check.getId().toString());
+                response.addCookie(cookie);
+                return new ResponseEntity(HttpStatus.OK);
+            } else {
+                return new ResponseEntity(HttpStatus.FORBIDDEN);
+            }
+        }
+    }
+
+    @PostMapping("/createUser")
     public ResponseEntity createUser(@RequestBody User user) {
         try {
             User _user = userRepository
@@ -33,7 +64,7 @@ public class UserController {
         }
     }
 
-    @GetMapping("/users/getAllUsers")
+    @GetMapping("/getAllUsers")
     public ResponseEntity<List<User>> getAllUsers() {
         try {
             List<User> userList = new ArrayList<User>();
@@ -45,7 +76,7 @@ public class UserController {
         }
     }
 
-    @GetMapping("/users/getUserById/{id}")
+    @GetMapping("/getUserById/{id}")
     public ResponseEntity<User> getUserById(@PathVariable("id") Integer id) {
         Optional<User> userData = userRepository.findById(id);
 
@@ -56,7 +87,7 @@ public class UserController {
         }
     }
 
-    @GetMapping("/users/getUserByUsername/{username}")
+    @GetMapping("/getUserByUsername/{username}")
     public ResponseEntity<User> getUserByUsername(@PathVariable("username") String username) {
         Optional<User> userData = userRepository.findByUsername(username);
 
@@ -67,7 +98,7 @@ public class UserController {
         }
     }
 
-    @PatchMapping("/users/updateUser/{id}")
+    @PatchMapping("/updateUser/{id}")
     public ResponseEntity<User> updateUser(@PathVariable("id") Integer id, @RequestBody User user) {
         List<String> availableFields = Arrays.asList("username","password","email","userLevel");
         Optional<User> userData = userRepository.findById(id);

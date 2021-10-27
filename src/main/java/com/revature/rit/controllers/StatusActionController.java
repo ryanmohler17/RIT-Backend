@@ -16,10 +16,10 @@ import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
 
-@CrossOrigin(origins = "http://localhost:8080")
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/status")
 @Transactional
+@CrossOrigin("*")
 public class StatusActionController {
     @Autowired
     StatusActionRepository statusActionRepository;
@@ -33,7 +33,7 @@ public class StatusActionController {
     @Autowired
     UserRepository userRepository;
 
-    @PostMapping("/status/changeStatus")
+    @PostMapping("/changeStatus")
     public ResponseEntity changeStatus(@RequestBody StatusInput statusInput) {
         try {
             Issue issue = issueRepository.findById(statusInput.getIssueId()).get();
