@@ -25,6 +25,8 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
+import org.springframework.transaction.PlatformTransactionManager;
+import org.springframework.transaction.TransactionManager;
 
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -51,9 +53,10 @@ class UserControllerTest {
     IssueRepository issueRepository;
     @MockBean
     StatusActionRepository statusActionRepository;
+    @MockBean
+    PlatformTransactionManager transactionManager;
 
     @Test
-    @Ignore
     public void createUser() throws Exception {
         /*
         {
@@ -70,7 +73,7 @@ class UserControllerTest {
         user.setEmail("email@test.com");
         user.setUserLevel(UserLevel.valueOf("User"));
         mockMvc.perform(
-                MockMvcRequestBuilders.post("/api/users/createUser")
+                MockMvcRequestBuilders.post("/users/createUser")
                         .content(asJsonString(new User(user.getUsername(),user.getPassword(),user.getEmail(),user.getUserLevel())))
                         .contentType(MediaType.APPLICATION_JSON_VALUE)
                         .accept(MediaType.APPLICATION_JSON))
@@ -94,9 +97,8 @@ class UserControllerTest {
     }
 
     @Test
-    @Ignore
     public void getAllUsers() throws Exception {
-        String uri = "/api/users/getAllUsers";
+        String uri = "/users/getAllUsers";
         mockMvc.perform(
                 MockMvcRequestBuilders.get(uri))
                 .andExpect(MockMvcResultMatchers.status().isOk())
