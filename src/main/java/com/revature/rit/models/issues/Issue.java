@@ -1,5 +1,6 @@
 package com.revature.rit.models.issues;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.revature.rit.models.boards.BoardList;
 import com.revature.rit.models.users.User;
 import lombok.AllArgsConstructor;
@@ -45,5 +46,6 @@ public class Issue {
     private String issueStatus;
 
     @ManyToMany(mappedBy = "issues")
+    @JsonIgnore
     private Set<BoardList> boardsList = new HashSet<>();
 }

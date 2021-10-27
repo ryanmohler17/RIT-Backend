@@ -119,6 +119,9 @@ class BoardControllerTest {
         Mockito.when(boardRepository.findById(Mockito.anyInt())).then(invocation -> {
             return Optional.of(new Board("test", "test", new User("test", "test", "test", UserLevel.User)));
         });
+        Mockito.when(boardListRepository.save(Mockito.any())).then(invocation -> {
+            return invocation.getArgument(0);
+        });
         Board board = new Board("test", "test", new User("test", "test", "test", UserLevel.User));
         String uri = "/board/updateBoard/1";
         mockMvc.perform(MockMvcRequestBuilders.patch(uri).contentType(MediaType.APPLICATION_JSON).content(mapper.writeValueAsString(board)))
