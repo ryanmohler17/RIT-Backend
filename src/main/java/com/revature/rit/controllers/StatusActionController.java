@@ -1,55 +1,59 @@
 package com.revature.rit.controllers;
 
+import com.revature.rit.models.issues.CommentAction;
+import com.revature.rit.models.issues.Issue;
+import com.revature.rit.models.issues.IssueAction;
 import com.revature.rit.models.issues.StatusAction;
+import com.revature.rit.models.issues.request.CommentInput;
+import com.revature.rit.models.issues.request.StatusInput;
+import com.revature.rit.models.users.User;
+import com.revature.rit.reposistory.*;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpServletRequest;
-import java.net.URI;
-import java.util.List;
+import java.time.LocalDateTime;
 
 @RestController
-@RequestMapping("/statusactions")
-public class StatusActionController implements ObjectController<StatusAction> {
-    @Override
-    public List<StatusAction> getAllData() {
-        //TODO: Hook into database dao.
+@RequestMapping("/status")
+@Transactional
+@CrossOrigin("*")
+public class StatusActionController {
+    @Autowired
+    StatusActionRepository statusActionRepository;
 
-        //Ex: statusAction = dao.getAllStatusActions();
-        List<StatusAction> statusAction = null;
+    @Autowired
+    IssueActionRepository issueActionRepository;
 
-        return statusAction;
-    }
+    @Autowired
+    IssueRepository issueRepository;
 
-    @Override
-    public ResponseEntity<StatusAction> getData(int id) {
-        //TODO: Hook into database dao.
+    @Autowired
+    UserRepository userRepository;
 
-        //Ex: statusAction = dao.getStatusAction(id);
-        StatusAction statusAction = null;
-
-        if (statusAction == null) {
-            return new ResponseEntity<StatusAction>(HttpStatus.NOT_FOUND);
-        }
-
-        return new ResponseEntity<StatusAction>(statusAction, HttpStatus.OK);
-    }
-
-    @Override
-    public ResponseEntity addData(HttpServletRequest request, StatusAction obj) {
-        System.out.println(obj); //Debug
-
+    @PostMapping("/changeStatus")
+    public ResponseEntity changeStatus(@RequestBody StatusInput statusInput) {
         try {
-            //TODO: Create status action and insert into database.
+            Issue issue = issueRepository.findById(statusInput.getIssueId()).get();
+            User user = userRepository.findById(statusInput.getUserId()).get();
+            IssueAction issueAction = new IssueAction();
+            issueAction.setIssue(issue);
+            issueAction.setUser(user);
+            issueAction.setDoneAt(LocalDateTime.now());
+            issueAction.setActionType("Status Change");
+            IssueAction createdIssueAction = issueActionRepository.save(issueAction);
 
-            //Ex: dao.addStatusAction(statusAction);
+            StatusAction newStatus = new StatusAction();
+            newStatus.setStatusName(statusInput.getStatus());
 
-            //TODO: Fix hard-coded url.
-            return ResponseEntity.created(new URI("http://localhost:8080/statusactions/" + obj.getId())).build();
+            StatusAction _statusAction = statusActionRepository.save(newStatus);
+            issue.setIssueStatus(_statusAction.getStatusName());
+            issueRepository.save(issue);
+            return new ResponseEntity<>(_statusAction, HttpStatus.CREATED);
         } catch (Exception e) {
-            return ResponseEntity.internalServerError().body("There was a problem creating status action.");
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 }

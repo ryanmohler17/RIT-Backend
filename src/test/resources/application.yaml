@@ -2,5 +2,18 @@
 twilio:
   send-grid:
     api-key: ''
-    
+
+spring:
+  datasource:
+    url: ''
+    username: ''
+    password: ''
+  jpa:
+    properties:
+      hibernate:
+        jdbc:
+          lob:
+            non_contextual_creation: true
+        dialect: 'org.hibernate.dialect.PostgreSQLDialect'
+
 email: 'rits@weeryan17.com'
