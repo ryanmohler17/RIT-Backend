@@ -95,12 +95,14 @@ public class BoardController {
                     case "creator": if (board.getCreator() != null) _board.setCreator(board.getCreator()); break;
                 }
             }
-            for (BoardList list : board.getLists()) {
-                boolean hasList = _board.getLists().stream().anyMatch(boardList -> Objects.equals(boardList.getId(), list.getId()));
-                list.setBoard(_board);
-                BoardList newList = boardListRepository.save(list);
-                if (!hasList) {
-                    _board.getLists().add(newList);
+            if (board.getLists() != null) {
+                for (BoardList list : board.getLists()) {
+                    boolean hasList = _board.getLists().stream().anyMatch(boardList -> Objects.equals(boardList.getId(), list.getId()));
+                    list.setBoard(_board);
+                    BoardList newList = boardListRepository.save(list);
+                    if (!hasList) {
+                        _board.getLists().add(newList);
+                    }
                 }
             }
             return new ResponseEntity<>(boardRepository.save(_board), HttpStatus.OK);
