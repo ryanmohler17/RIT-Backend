@@ -99,10 +99,7 @@ public class BoardController {
                 boolean hasList = _board.getLists().stream().anyMatch(boardList -> Objects.equals(boardList.getId(), list.getId()));
                 list.setBoard(_board);
                 BoardList newList = boardListRepository.save(list);
-                if (hasList) {
-                    BoardList existing = _board.getLists().stream().filter(boardList -> Objects.equals(boardList.getId(), list.getId())).findFirst().get();
-                    _board.getLists().set(_board.getLists().indexOf(existing), newList);
-                } else {
+                if (!hasList) {
                     _board.getLists().add(newList);
                 }
             }
