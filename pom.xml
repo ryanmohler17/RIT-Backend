@@ -125,6 +125,9 @@
                         </goals>
                     </execution>
                 </executions>
+                <configuration>
+                    <excludes>com/revature/rit/models/**/*</excludes>
+                </configuration>
             </plugin>
         </plugins>
     </build>

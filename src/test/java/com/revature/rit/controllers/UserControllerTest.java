@@ -14,6 +14,8 @@ import org.junit.Assert;
 import org.junit.Ignore;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
+import org.mockito.Mockito;
+import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
@@ -29,6 +31,8 @@ import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.TransactionManager;
+
+import java.util.Optional;
 
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -172,16 +176,15 @@ class UserControllerTest {
     }
 
     @Test
-    void updateUser() {
-        UserController uc = new UserController();
-        ResponseEntity<User> result = null;
+    void updateUser() throws Exception {
+        Mockito.when(userRepository.findById(Mockito.anyInt())).then(invocation -> {
+            Optional<User> optionalUser = Optional.of(new User("test", "test", "email", UserLevel.User));
+            return optionalUser;
+        });
+        User user = new User("test", "test", "email", UserLevel.User);
+        String uri = "/users/updateUser/1";
+        mockMvc.perform(MockMvcRequestBuilders.patch(uri).contentType(MediaType.APPLICATION_JSON).content(asJsonString(user)))
+                .andExpect(MockMvcResultMatchers.status().isOk());
 
-        try {
-            result = uc.updateUser(1, new User());
-        } catch (Exception e) {
-
-        }
-
-        Assert.assertEquals(result, result);
     }
 }
