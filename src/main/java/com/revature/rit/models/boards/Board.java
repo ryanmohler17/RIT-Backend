@@ -39,6 +39,9 @@ public class Board {
     )
     private List<User> users;
 
+    @OneToMany(mappedBy = "board")
+    private List<BoardList> lists;
+
     public Board(String title, String description, User user) {
         this.title = title;
         this.description = description;

@@ -1,7 +1,9 @@
 package com.revature.rit.controllers;
 
 import com.revature.rit.models.boards.Board;
+import com.revature.rit.models.boards.BoardList;
 import com.revature.rit.models.users.User;
+import com.revature.rit.reposistory.BoardListRepository;
 import com.revature.rit.reposistory.BoardRepository;
 import com.revature.rit.reposistory.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +16,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 @RestController
@@ -27,6 +30,9 @@ public class BoardController {
 
     @Autowired
     UserRepository userRepository;
+
+    @Autowired
+    BoardListRepository boardListRepository;
 
     @PostMapping("/createBoard")
     public ResponseEntity createBoard(@RequestBody Board board) {
@@ -89,7 +95,17 @@ public class BoardController {
                     case "creator": if (board.getCreator() != null) _board.setCreator(board.getCreator()); break;
                 }
             }
-            _board.setCreatedAt(LocalDateTime.now());
+            for (BoardList list : board.getLists()) {
+                boolean hasList = _board.getLists().stream().anyMatch(boardList -> Objects.equals(boardList.getId(), list.getId()));
+                list.setBoard(_board);
+                BoardList newList = boardListRepository.save(list);
+                if (hasList) {
+                    BoardList existing = _board.getLists().stream().filter(boardList -> Objects.equals(boardList.getId(), list.getId())).findFirst().get();
+                    _board.getLists().set(_board.getLists().indexOf(existing), newList);
+                } else {
+                    _board.getLists().add(newList);
+                }
+            }
             return new ResponseEntity<>(boardRepository.save(_board), HttpStatus.OK);
         } else {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);

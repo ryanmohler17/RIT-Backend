@@ -1,5 +1,6 @@
 package com.revature.rit.models.boards;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.revature.rit.models.issues.Issue;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -24,6 +25,7 @@ public class BoardList {
 
     @ManyToOne
     @JoinColumn(name = "board_id_fk")
+    @JsonIgnore
     private Board board;
 
     @ManyToMany
